@@ -14,13 +14,13 @@ from colorama import Fore, Style, init
 
 init(autoreset=True)
 
-# ---------------- Configuration ----------------
+# Configuration 
 
 MAX_ATTEMPTS = 3
 IT_PHRASE = "2025"        # Simulated IT onboarding phrase
 USER_FILE = "users.json"
 
-# ---------------- File Handling ----------------
+# File Handling 
 
 def load_users():
     if not os.path.exists(USER_FILE):
@@ -32,7 +32,7 @@ def load_users():
         except json.JSONDecodeError:
             return {}
 
-    # Auto-upgrade legacy format (username: hash)
+    # Auto-upgrade from legacy format (username: hash)
     upgraded = {}
     for username, value in data.items():
         if isinstance(value, str):
