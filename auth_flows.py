@@ -1,7 +1,7 @@
 from colorama import Fore, Style
 from config import MAX_ATTEMPTS, IT_PHRASE
 from security import hash_password, check_password
-from database import get_user,get_all_users,add_user, user_exists, update_password
+from database import get_user,get_all_users,add_user, user_exists, update_password, make_admin
 
 # ---------------- Registration ----------------
 
@@ -130,3 +130,6 @@ def AdminPanel():
     for row in users:
         status = "ACTIVE" if row["active"] else "DISABLED"
         print(f"{row['username']} | {row['role']} | {status}")
+
+#Might make a make a user an admin feature
+    

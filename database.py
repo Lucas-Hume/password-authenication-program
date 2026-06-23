@@ -76,3 +76,5 @@ def update_password(username, hashed_password):
                    """, (hashed_password, username))
     conn.commit()
     conn.close()
+
+#Might make a make a user an admin database
