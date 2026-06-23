@@ -1,11 +1,15 @@
-import sqlite3
+import sqlite3,json,os
 
 DB_NAME = "users.db"
 
 
 def connect_db():
-    return sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_NAME)
+    conn.row_factory = sqlite3.Row
+    return conn
 
+def user_exists(username):
+    return get_user(username) is not None
 
 def create_db():
     conn = connect_db()
@@ -60,5 +64,15 @@ def get_all_users():
     users = cursor.fetchall()
     conn.close()
 
-
     return users
+def update_password(username, hashed_password):
+    conn= connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                   UPDATE users
+                   SET password = ?
+                   WHERE username = ?
+                   """, (hashed_password, username))
+    conn.commit()
+    conn.close()

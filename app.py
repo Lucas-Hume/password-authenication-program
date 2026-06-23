@@ -9,12 +9,13 @@
 
 from database import create_db
 from colorama import Fore, Style, init
-from config import MAX_ATTEMPTS, IT_PHRASE, USER_FILE
-from storage import load_users, save_users
-from security import hash_password, check_password, Registration, LogIn, ViewAccounts, AdminPanel
+from config import MAX_ATTEMPTS, IT_PHRASE
+from security import hash_password, check_password
+from auth_flows import Registration, LogIn, ViewAccounts, AdminPanel, ForgotPassword
 
 init(autoreset=True)
 create_db()
+
 # Configuration 
 
 
@@ -39,12 +40,14 @@ def resolve_command(user_input):
     if any(cmd in user_input for cmd in ["quit", "exit", "sign out"]):
         return "quit"
     
+    if any(cmd in user_input for cmd in ["Forgot","reset"]):
+        return "reset"
+    
 
     return None
 
 #  Main Program 
 
-users = load_users()
 logged_in_user = None
 logged_in_role = None
 
@@ -56,16 +59,19 @@ while True:
     print(Fore.GREEN + "Register  - Create a new account")
     print(Fore.GREEN + "Login     - Log in to the system")
     print(Fore.GREEN + "View      - View existing accounts")
+    print(Fore.GREEN + "Reset     - Reset a forgotten password")
     print(Fore.RED   + "Quit      - Exit the program")
 
     user_input = input(Fore.MAGENTA + Style.BRIGHT + "> ")
     command = resolve_command(user_input)
 
     if command == "register":
-        Registration(users)
+        Registration()
+    elif command =="reset":
+        ForgotPassword()
 
     elif command == "login":
-        logged_in_user, logged_in_role = LogIn(users)
+        logged_in_user, logged_in_role = LogIn()
         if logged_in_user:
             print(Fore.GREEN +
                   "You have successfully logged in.")
@@ -76,12 +82,12 @@ while True:
         if not logged_in_user:
             print(Fore.RED + Style.BRIGHT +
               "Admin access denied. You must be logged in.")
-        continue
+            continue
 
         if logged_in_role != "admin":
             print(Fore.RED + Style.BRIGHT +
               "Admin access denied. Insufficient privileges.")
-        continue
+            continue
 
         AdminPanel()
 
@@ -89,11 +95,11 @@ while True:
         if not logged_in_user:
             print(Fore.YELLOW + Style.BRIGHT +
                   "Must log in to view accounts.")
-            logged_in_user, logged_in_role = LogIn(users)
+            logged_in_user, logged_in_role = LogIn()
             if not logged_in_user:
                 continue
 
-        ViewAccounts(users, logged_in_user)
+        ViewAccounts(logged_in_user)
 
     elif command == "quit":
         print(Fore.CYAN + Style.BRIGHT + "Goodbye.")
@@ -101,4 +107,4 @@ while True:
 
     else:
         print(Fore.RED + Style.BRIGHT +
-              "Error - try 'register', 'login', 'view', or 'quit'.")
+              "Error - try 'register', 'login', 'view','reset' or 'quit'.")

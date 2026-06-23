@@ -41,8 +41,8 @@ def _row_to_dict(row):
         return None
     _id, username, password, role, active = row
     return {
-        #"id": _id,
-        #"username": username,
+        "id": _id,
+        "username": username,
         "password": password,
         "role": role,
         "active": bool(active)
