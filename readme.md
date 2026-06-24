@@ -2,11 +2,13 @@
 
 A command-line user authentication and account management system written in
 Python. The program uses bcrypt to securely hash passwords and stores account
-data in a JSON file.
+data in a database file as of 24th June 2026.
 
 This project was originally developed as part of a TAFE assessment and was
 later independently refactored and extended to follow industry-aligned
 security and design practices.
+
+This program now has multiple files and has been upgraded previously from JSON storage
 
 ---
 
@@ -30,6 +32,7 @@ security and design practices.
 - bcrypt hashing prevents password recovery
 - Administrators can manage accounts but **cannot view passwords**
 - Login attempts are limited to reduce brute-force attempts
+- Pass phrase is used to register a new account or use the forgotten password feature
 
 ---
 
@@ -37,7 +40,11 @@ security and design practices.
 
 .
 ├── app.py
-├── users.json
+├── users.db
+├──auth_flows.py
+├──config.py
+├──security.py
+├──storage.py
 ├── requirements.txt
 └── README.md
 
@@ -76,6 +83,7 @@ Commands may be entered in natural language, for example:
 - `log in`
 - `view accounts`
 - `exit`
+- 'forgot'
 
 ---
 
